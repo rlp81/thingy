@@ -70,6 +70,6 @@ async def on_ready():
                     time.sleep(1)
     await channel.send(botinfo.startmes)
     time.sleep(3)
-    print(f"Started Up Finished\n---------------------------\n{curr_clock} | {client.user} is ready.\n---------------------------")
+    print(f"Started Up Finished\n----------------------------------\n{curr_clock} | {client.user} is ready.\n----------------------------------")
 
 client.run(Token)
