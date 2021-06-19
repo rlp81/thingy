@@ -1,7 +1,11 @@
 import discord
 from discord.ext import commands
 import wolframalpha
-AI_Client = wolframalpha.Client('apiid')
+import json
+with open("..\\config.json", "r") as f:
+    conf = json.load(f)
+ID = conf["Wolframalpha_API_ID"]
+AI_Client = wolframalpha.Client(ID)
 class Ques(commands.Cog):
     
     def __init__(self, client):
