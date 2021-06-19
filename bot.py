@@ -2,8 +2,15 @@ import discord
 import os
 from discord.ext import commands
 import json
-with open("config.json", "r") as f:
-    conf = json.load(f)
+import time
+curr_time = time.localtime()
+curr_clock = time.strftime("%H:%M:%S", curr_time)
+conf = ""
+try:
+    with open("config.json", "r") as f:
+        conf = json.load(f)
+except:
+    print("ERROR: can not access config.json")
 Token = conf[str("Token")]
 Startup_Channel_ID = conf[str("Startup_channel_ID")]
 
@@ -44,7 +51,10 @@ async def reload(context, extintion):
 
 @client.event
 async def on_ready():
-    print(f"{client.user} is ready.")
+    print("Start up initiated")
+    time.sleep(2)
+    print("Loading cogs..")
+    time.sleep(4)
     channel = client.get_channel(int(Startup_Channel_ID))
     for filename in os.listdir('./cogs'):
         if not filename == "template.py":
@@ -53,9 +63,13 @@ async def on_ready():
                     client.load_extension(f'cogs.{filename[:-3]}')
                     print(f'cogs.{filename[:-3]} loaded successfully')
                     botinfo.startmes += f"cogs.{filename[:-3]} loaded successfully \n"
+                    time.sleep(1)
                 except:
                     print(f'cogs.{filename[:-3]} failed to load.')
                     botinfo.startmes += f"cogs.{filename[:-3]} failed to load \n"
+                    time.sleep(1)
     await channel.send(botinfo.startmes)
+    time.sleep(3)
+    print(f"Started Up Finished\n---------------------------\n{curr_clock} | {client.user} is ready.\n---------------------------\n Token used: {Token}")
 
 client.run(Token)
