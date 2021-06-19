@@ -1,8 +1,7 @@
 import discord
 from discord.ext import commands
 import wolframalpha
-AI_Client = wolframalpha.Client('E3E6YA-HRHT55JG9J')
-AI_Client2 = wolframalpha.Client('E3E6YA-8UHT84A2WA')
+AI_Client = wolframalpha.Client('apiid')
 class Ques(commands.Cog):
     
     def __init__(self, client):
