@@ -4,8 +4,8 @@ from discord.ext import commands
 import json
 with open("config.json", "r") as f:
     conf = json.load(f)
-Token = conf["Token"]
-Startup_Channel_ID = conf["Startup_channel_ID"]
+Token = conf[str("Token")]
+Startup_Channel_ID = conf[str("Startup_channel_ID")]
 
 client = commands.Bot(command_prefix="-", help_command=None)
 
@@ -45,7 +45,7 @@ async def reload(context, extintion):
 @client.event
 async def on_ready():
     print(f"{client.user} is ready.")
-    channel = client.get_channel(Startup_Channel_ID)
+    channel = client.get_channel(int(Startup_Channel_ID))
     for filename in os.listdir('./cogs'):
         if not filename == "template.py":
             if filename.endswith('.py'):
