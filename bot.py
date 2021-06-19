@@ -53,4 +53,4 @@ async def on_ready():
                     botinfo.startmes += f"cogs.{filename[:-3]} failed to load \n"
     await channel.send(botinfo.startmes)
 
-client.run("ODM3OTEzNDEzMTQwNzQyMTQ0.YIzdrQ.vHXjlRsoCwR60cV-X8tD9saa5Ns")
+client.run("token")
