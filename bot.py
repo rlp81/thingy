@@ -3,6 +3,8 @@ import os
 from discord.ext import commands
 import json
 import time
+intents = discord.Intents.default()
+intents.members = True
 curr_time = time.localtime()
 curr_clock = time.strftime("%H:%M:%S", curr_time)
 conf = ""
@@ -13,16 +15,23 @@ except:
     print("ERROR: can not access config.json")
 Token = conf[str("Token")]
 Startup_Channel_ID = conf[str("Startup_channel_ID")]
+ownerid =conf[str("owner_ID")]
+ownerid = int(ownerid)
+Welcome_channel = conf["welcome_channel"]
+Welcome_channel = int(Welcome_channel)
 
-client = commands.Bot(command_prefix="-", help_command=None)
+client = commands.Bot(command_prefix="-", help_command=None, intents=intents)
 
 @client.command()
 async def load(context, extintion):
-    try:
-        client.load_extension(f'cogs.{extintion}')
-        await context.send(f"cogs.{extintion} loaded sucessfully!")
-    except:
-        await context.send(f"cogs.{extintion} failed to load!")
+    if context.author.id == ownerid:
+        try:
+            client.load_extension(f'cogs.{extintion}')
+            await context.send(f"cogs.{extintion} loaded sucessfully!")
+        except:
+            await context.send(f"cogs.{extintion} failed to load!")
+    if not context.author.id == ownerid:
+        await context.send("You must be Coal to run this command.")
 class botinfo:
     startmes = ""
     def listcom(clist):
@@ -33,21 +42,34 @@ class botinfo:
         return clist
 @client.command()
 async def unload(context, extintion):
-    try:
-        client.unload_extension(f'cogs.{extintion}')
-        await context.send(f"cogs.{extintion} unloaded sucessfully!")
-    except:
-        await context.send(f"cogs.{extintion} failed to unload!")
+    if context.author.id == ownerid:
+        try:
+            client.unload_extension(f'cogs.{extintion}')
+            await context.send(f"cogs.{extintion} unloaded sucessfully!")
+        except:
+            await context.send(f"cogs.{extintion} failed to unload!")
+    if not context.author.id == ownerid:
+        await context.send("You must be Coal to run this command.")
 
 @client.command()
 async def reload(context, extintion):
-    try:
-        client.unload_extension(f'cogs.{extintion}')
-        client.load_extension(f'cogs.{extintion}')
-        await context.send(f"cogs.{extintion} reloaded sucessfully!")
-    except:
-        await context.send(f"cogs.{extintion} failed to reload!")
-
+    if context.author.id == ownerid:
+        try:
+            client.unload_extension(f'cogs.{extintion}')
+            client.load_extension(f'cogs.{extintion}')
+            await context.send(f"cogs.{extintion} reloaded sucessfully!")
+        except:
+            await context.send(f"cogs.{extintion} failed to reload!")
+    if not context.author.id == ownerid:
+        await context.send("You must be Coal to run this command.")
+@client.event
+async def on_member_join(member):
+    channel = client.get_channel(Welcome_channel)
+    await channel.send(f"Welcome to Coal's Lab, {member.mention}!")
+@client.event
+async def on_member_remove(member):
+    channel = client.get_channel(Welcome_channel)
+    await channel.send(f"{member} has left us :c")
 
 @client.event
 async def on_ready():
@@ -71,5 +93,4 @@ async def on_ready():
     await channel.send(botinfo.startmes)
     time.sleep(3)
     print(f"Started Up Finished\n----------------------------------\n{curr_clock} | {client.user} is ready.\n----------------------------------")
-
 client.run(Token)
